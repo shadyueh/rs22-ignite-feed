@@ -1,5 +1,3 @@
-import '/src/styles.css'
-
 export function Post(props) {
   return (
     <div>
