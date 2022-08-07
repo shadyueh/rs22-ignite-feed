@@ -1,39 +1,58 @@
+import { format, formatDistanceToNow } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
+
 import styles from "./Post.module.css";
 import { Comment } from "./Comment";
 import { Avatar } from "./Avatar";
 
-export function Post() {
+export function Post({ author, publishedAt, content }) {
+  const publishedDateFormatted = format(
+    publishedAt,
+    "d 'de' LLLL 'às' HH:mm'h'",
+    { locale: ptBR }
+  );
+
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  });
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src="https://github.com/shadyueh.png" />
+          <Avatar src={author.avatarUrl} alt={author.name} />
           <div className={styles.authorInfo}>
-            <strong>Shadow Yueh</strong>
-            <span>Shadow Bringer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time title="1 de Julho às 21:03h" dateTime="2022-07-01 21:03:45">
-          Publicado há 1d
+        <time
+          title={publishedDateFormatted}
+          dateTime={publishedAt.toISOString()}
+        >
+          {publishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa</p>
-        <p>
-          👋 Acabei de subir mais um projeto no meu portifa. É um projeto que
-          fiz no NLW Return, evento da Rocketseat. O nome do projeto é
-          DoctorCare 🚀
-        </p>
-        <p>
-          👉 <a href="#">jane.design/doctorcare</a>
-        </p>
-        <p>
-          <a href="#">#novoprojeto</a>
-          <a href="#">#nlw</a>
-          <a href="#">#rocketseat</a>
-        </p>
+        {content.map((line) => {
+          let htmlText = "";
+          switch (line.type) {
+            case "paragraph":
+              htmlText = <p>{line.content}</p>;
+              break;
+            case "link":
+              htmlText = (
+                <p>
+                  <a href="#">{line.content}</a>
+                </p>
+              );
+              break;
+          }
+          return htmlText;
+        })}
       </div>
 
       <form className={styles.commentForm}>

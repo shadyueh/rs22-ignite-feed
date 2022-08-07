@@ -6,6 +6,37 @@ import styles from "./App.module.css";
 
 import "./global.css";
 
+const posts = [
+  {
+    id: 1,
+    author:{
+      avatarUrl: "https://github.com/diego3g.png",
+      name: "Diego Fernandes",
+      role: "CTO @Rocketseat",
+    },
+    content: [
+      {type: 'paragraph', content:'Fala galeraa 🖐'},
+      {type: 'paragraph', content:'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
+      {type: 'link', content:'shadyueh.github.io'},
+    ],
+    publishedAt: new Date('2022-08-07 14:41:34'),
+  },
+  {
+    id: 2,
+    author:{
+      avatarUrl: "https://github.com/maykbrito.png",
+      name: "Mayk Brito",
+      role: "Educator @Rocketseat",
+    },
+    content: [
+      {type: 'paragraph', content:'Fala galeraa 🖐'},
+      {type: 'paragraph', content:'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat.'},
+      {type: 'link', content:'shadyueh.github.io'},
+    ],
+    publishedAt: new Date('2022-08-05 20:37:32'),
+  }
+]
+
 export function App() {
   return (
     <div>
@@ -14,23 +45,14 @@ export function App() {
       <div className={styles.wrapper}>
         <Sidebar />
         <main>
-          <Post
-            author="Andre Gide"
-            content="It is better to be hated for what you are than to be loved for what you are not."
-          />
-          <Post
-            author="John Green"
-            content="The only way out of the labyrinth of suffering is to forgive."
-          />
-          <Post
-            author="W.C. Fields"
-            content="I am free of all prejudice. I hate everyone equally."
-          />
-          <Post
-            author="Pablo Neruda"
-            content="I love you as certain dark things are to be loved,
-            in secret, between the shadow and the soul."
-          />
+          {posts.map(post => {
+            return (<Post 
+              author={post.author}
+              content={post.content}
+              publishedAt={post.publishedAt}
+              />
+            )
+          })}
         </main>
       </div>
     </div>
