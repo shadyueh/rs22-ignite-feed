@@ -5,6 +5,7 @@ import styles from "./Post.module.css";
 import { Comment } from "./Comment";
 import { Avatar } from "./Avatar";
 import { useState } from "react";
+import { PencilLine } from "phosphor-react";
 
 export function Post({ author, publishedAt, content }) {
   const [comments, setComments] = useState(["Post muito bacana!"]);
@@ -56,11 +57,11 @@ export function Post({ author, publishedAt, content }) {
           let htmlText = "";
           switch (line.type) {
             case "paragraph":
-              htmlText = <p>{line.content}</p>;
+              htmlText = <p key={line.content}>{line.content}</p>;
               break;
             case "link":
               htmlText = (
-                <p>
+                <p key={line.content}>
                   <a href="#">{line.content}</a>
                 </p>
               );
@@ -85,7 +86,7 @@ export function Post({ author, publishedAt, content }) {
 
       <div className={styles.commentList}>
         {comments.map((comment) => {
-          return <Comment content={comment} />;
+          return <Comment key={comment} content={comment} />;
         })}
       </div>
     </article>
