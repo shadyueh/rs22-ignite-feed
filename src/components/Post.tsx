@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { ChangeEvent, FormEvent, InvalidEvent, useState  } from "react";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
@@ -14,7 +14,7 @@ interface Author {
 }
 
 interface Content {
-  type: 'paragraph' | 'link';
+  type: "paragraph" | "link";
   content: string;
 }
 
@@ -86,10 +86,10 @@ export function Post({ author, publishedAt, content }: PostProps) {
       <div className={styles.content}>
         {content.map((line) => {
           switch (line.type) {
-            case 'paragraph':
+            case "paragraph":
               return <p key={line.content}>{line.content}</p>;
               break;
-            case 'link':
+            case "link":
               return (
                 <p key={line.content}>
                   <a href="#">{line.content}</a>

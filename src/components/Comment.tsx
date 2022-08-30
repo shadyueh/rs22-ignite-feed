@@ -8,7 +8,6 @@ interface CommentProps {
   onDeleteComment: (comment: string) => void;
 }
 
-
 export function Comment({ content, onDeleteComment }: CommentProps) {
   const [likeCount, setLikeCount] = useState(0);
 
