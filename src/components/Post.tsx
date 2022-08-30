@@ -1,13 +1,30 @@
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
+import { ChangeEvent, FormEvent, InvalidEvent, useState  } from "react";
+
+import { Avatar } from "./Avatar";
+import { Comment } from "./Comment";
 
 import styles from "./Post.module.css";
-import { Comment } from "./Comment";
-import { Avatar } from "./Avatar";
-import { useState } from "react";
-import { PencilLine } from "phosphor-react";
 
-export function Post({ author, publishedAt, content }) {
+interface Author {
+  name: string;
+  role: string;
+  avatarUrl: string;
+}
+
+interface Content {
+  type: 'paragraph' | 'link';
+  content: string;
+}
+
+export interface PostProps {
+  author: Author;
+  publishedAt: Date;
+  content: Content[];
+}
+
+export function Post({ author, publishedAt, content }: PostProps) {
   const [comments, setComments] = useState(["Post muito bacana!"]);
 
   const [newCommentText, setNewCommentText] = useState("");
@@ -23,22 +40,22 @@ export function Post({ author, publishedAt, content }) {
     addSuffix: true,
   });
 
-  function handleCreateNewComment() {
+  function handleCreateNewComment(event: FormEvent) {
     event.preventDefault();
     setComments([...comments, newCommentText]);
     setNewCommentText("");
   }
 
-  function handleNewCommentChange() {
+  function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity("");
     setNewCommentText(event.target.value);
   }
 
-  function handleNewCommentInvalid() {
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity("Esse campo é obrigatório");
   }
 
-  function deleteComment(commentToDelete) {
+  function deleteComment(commentToDelete: string) {
     const commentsWithoutDeletedOne = comments.filter((comment) => {
       return comment !== commentToDelete;
     });
@@ -68,20 +85,18 @@ export function Post({ author, publishedAt, content }) {
 
       <div className={styles.content}>
         {content.map((line) => {
-          let htmlText = "";
           switch (line.type) {
-            case "paragraph":
-              htmlText = <p key={line.content}>{line.content}</p>;
+            case 'paragraph':
+              return <p key={line.content}>{line.content}</p>;
               break;
-            case "link":
-              htmlText = (
+            case 'link':
+              return (
                 <p key={line.content}>
                   <a href="#">{line.content}</a>
                 </p>
               );
               break;
           }
-          return htmlText;
         })}
       </div>
 
@@ -96,7 +111,9 @@ export function Post({ author, publishedAt, content }) {
           required
         />
         <footer>
-          <button type="submit" disabled={isNewCommentEmpty}>Publicar</button>
+          <button type="submit" disabled={isNewCommentEmpty}>
+            Publicar
+          </button>
         </footer>
       </form>
 
